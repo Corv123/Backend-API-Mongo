@@ -1,0 +1,1 @@
+export * as merchantController from "./merchant_controller";

@@ -19,4 +19,7 @@ router.put('/:donation_id', donationController.updateDonation); // ✅ Update
 // DELETE /api/v1/donations/:donation_id
 router.delete('/:donation_id', donationController.deleteDonation); // ✅ Delete
 
+// Add /all endpoint from src copy
+router.get('/all', donationController.getAllDonations);
+
 export default router;  

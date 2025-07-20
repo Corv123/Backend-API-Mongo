@@ -19,4 +19,7 @@ router.put('/:order_id', orderController.updateOrder); // ✅ Update order
 // DELETE /api/v1/orders/:order_id
 router.delete('/:order_id', orderController.deleteOrder); // ✅ Delete order
 
+// Add /all endpoint from src copy
+router.get('/all', orderController.getAllOrders);
+
 export default router;

@@ -16,12 +16,50 @@ export class OrderController {
             this.deleteOrder = this.deleteOrder.bind(this);
         }
 
+    async getOrders(req: Request, res: Response) {
+        try {
+            const userId = parseInt(req.query.user_id as string);
+            if (isNaN(userId)) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Invalid user_id parameter'
+                });
+            }
+            const orderId = req.query.order_id ? parseInt(req.query.order_id as string) : undefined;
+            if (req.query.order_id && isNaN(orderId!)) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Invalid order_id parameter'
+                });
+            }
+            const query: any = {
+                user_id: userId,
+                order_id: orderId,
+                start_date: req.query.start_date as string,
+                end_date: req.query.end_date as string
+            };
+            const orders = await this.orderService.getOrders(query);
+            return res.status(200).json({
+                status: 'success',
+                result: { data: orders }
+            });
+        } catch (error) {
+            console.error('Error in getOrders:', error);
+            return res.status(500).json({
+                status: 'error',
+                message: 'Internal server error',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            });
+        }
+    }
+
     async getAllOrders(req: Request, res: Response) {
         try {
             const orders = await this.orderService.getAllOrders();
-            return res.status(200).json({ status: 'success', data: orders });
-        } catch {
-            return res.status(500).json({ status: 'error', message: 'Failed to fetch orders' });
+            return res.status(200).json({ status: 'success', result: { data: orders } });
+        } catch (error) {
+            console.error('Error in getAllOrders:', error);
+            return res.status(500).json({ status: 'error', message: 'Failed to fetch orders', details: error instanceof Error ? error.message : 'Unknown error' });
         }
     }
 
@@ -30,10 +68,11 @@ export class OrderController {
             const id = parseInt(req.params.order_id);
             const order = await this.orderService.getOrderById(id);
             return order
-                ? res.status(200).json({ status: 'success', data: order })
+                ? res.status(200).json({ status: 'success', result: { data: order } })
                 : res.status(404).json({ status: 'error', message: 'Order not found' });
-        } catch {
-            return res.status(500).json({ status: 'error', message: 'Error fetching order' });
+        } catch (error) {
+            console.error('Error in getOrderById:', error);
+            return res.status(500).json({ status: 'error', message: 'Error fetching order', details: error instanceof Error ? error.message : 'Unknown error' });
         }
     }
 
@@ -85,12 +124,16 @@ export class OrderController {
 
             const newOrder = await this.orderService.createOrder(newOrderData);
 
-            return res.status(201).json({ status: 'success', data: newOrder });
+            return res.status(201).json({
+                status: 'success',
+                result: { data: [ { order_message: 'Order Entry entered successfully.' } ] }
+            });
         } catch (error) {
             console.error('Error in createOrder:', error);
             return res.status(500).json({
                 status: 'error',
-                message: error instanceof Error ? error.message : 'Unknown error'
+                message: error instanceof Error ? error.message : 'Unknown error',
+                details: error instanceof Error ? error.message : 'Unknown error'
             });
         }
     }
@@ -99,9 +142,10 @@ export class OrderController {
         try {
             const id = parseInt(req.params.order_id);
             const updated = await this.orderService.updateOrder(id, req.body);
-            return res.status(200).json({ status: 'success', data: updated });
-        } catch {
-            return res.status(500).json({ status: 'error', message: 'Failed to update order' });
+            return res.status(200).json({ status: 'success', result: { data: updated } });
+        } catch (error) {
+            console.error('Error in updateOrder:', error);
+            return res.status(500).json({ status: 'error', message: 'Failed to update order', details: error instanceof Error ? error.message : 'Unknown error' });
         }
     }
 
@@ -112,8 +156,9 @@ export class OrderController {
             return deleted
                 ? res.status(200).json({ status: 'success', message: 'Order deleted' })
                 : res.status(404).json({ status: 'error', message: 'Order not found' });
-        } catch {
-            return res.status(500).json({ status: 'error', message: 'Failed to delete order' });
+        } catch (error) {
+            console.error('Error in deleteOrder:', error);
+            return res.status(500).json({ status: 'error', message: 'Failed to delete order', details: error instanceof Error ? error.message : 'Unknown error' });
         }
     }
 }

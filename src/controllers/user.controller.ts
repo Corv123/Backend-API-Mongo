@@ -11,7 +11,6 @@ export class UserController {
         this.getUserById = this.getUserById.bind(this);
         this.createUser = this.createUser.bind(this);
         this.updateUser = this.updateUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
         this.login = this.login.bind(this);
     }
     
@@ -91,95 +90,4 @@ async login(req: Request, res: Response) {
             return res.status(500).json({ status: 'error', message: 'Failed to update user' });
         }
     }
-
-    async deleteUser(req: Request, res: Response) {
-        try {
-            const id = parseInt(req.params.user_id);
-            const result = await this.userService.deleteUser(id);
-            if (!result) return res.status(404).json({ status: 'error', message: 'User not found' });
-            return res.status(200).json({ status: 'success', message: 'User deleted' });
-        } catch (err) {
-            return res.status(500).json({ status: 'error', message: 'Failed to delete user' });
-        }
-    }
-
-    async updateUsername(req: Request, res: Response) {
-    try {
-        const userId = parseInt(req.params.user_id);
-        const { username } = req.body;
-
-        if (!username || username.trim().length < 2) {
-            return res.status(400).json({ status: 'error', message: 'Invalid username' });
-        }
-
-        const updatedUser = await this.userService.updateUsername(userId, username);
-
-        if (!updatedUser) return res.status(404).json({ status: 'error', message: 'User not found' });
-
-        return res.status(200).json({ status: 'success', message: 'Username updated', data: updatedUser });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ status: 'error', message: 'Failed to update username' });
-    }
-}
-
-async updatePassword(req: Request, res: Response) {
-    try {
-        const userId = parseInt(req.params.user_id);
-        const { password } = req.body;
-
-        if (!password || password.length < 6) {
-            return res.status(400).json({ status: 'error', message: 'Password must be at least 6 characters' });
-        }
-
-        const updatedUser = await this.userService.updatePassword(userId, password);
-
-        if (!updatedUser) return res.status(404).json({ status: 'error', message: 'User not found' });
-
-        return res.status(200).json({ status: 'success', message: 'Password updated', data: updatedUser });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ status: 'error', message: 'Failed to update password' });
-    }
-}
-
-async updateEmail(req: Request, res: Response) {
-    try {
-        const userId = parseInt(req.params.user_id);
-        const { user_email } = req.body;
-
-        if (!user_email || !user_email.includes('@')) {
-            return res.status(400).json({ status: 'error', message: 'Invalid email' });
-        }
-
-        const updatedUser = await this.userService.updateEmail(userId, user_email);
-
-        if (!updatedUser) return res.status(404).json({ status: 'error', message: 'User not found' });
-
-        return res.status(200).json({ status: 'success', message: 'Email updated', data: updatedUser });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ status: 'error', message: 'Failed to update email' });
-    }
-}
-
-async updateMobile(req: Request, res: Response) {
-    try {
-        const userId = parseInt(req.params.user_id);
-        const { user_mobile_number } = req.body;
-
-        if (!user_mobile_number || user_mobile_number.length < 8) {
-            return res.status(400).json({ status: 'error', message: 'Invalid mobile number' });
-        }
-
-        const updatedUser = await this.userService.updateMobile(userId, user_mobile_number);
-
-        if (!updatedUser) return res.status(404).json({ status: 'error', message: 'User not found' });
-
-        return res.status(200).json({ status: 'success', message: 'Mobile number updated', data: updatedUser });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ status: 'error', message: 'Failed to update mobile number' });
-    }
-}
 }

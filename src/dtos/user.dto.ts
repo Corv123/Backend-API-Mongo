@@ -1,9 +1,10 @@
+
 export interface CreateUserDto {
-    username: string; // <-- Added
+    username: string;
     user_mobile_number: string;
     user_email: string;
-    password: string; // <-- Usually required on creation
-
+    password: string;
+    tokens: number;
     user_allow_dark_mode?: boolean;
     user_round_up_pref?: number;
     user_discount_donate?: number;
@@ -12,9 +13,11 @@ export interface CreateUserDto {
 }
 
 export interface UpdateUserDto {
-    username?: string; // <-- Added
+    username?: string;
     user_mobile_number?: string;
     user_email?: string;
+    password?: string;
+    tokens?: number;
     user_allow_dark_mode?: boolean;
     user_round_up_pref?: number;
     user_discount_donate?: number;
@@ -27,6 +30,8 @@ export interface UserResponseDto {
     username: string; // <-- Added
     user_mobile_number: string;
     user_email: string;
+    password?: string;
+    tokens?: number;
     user_allow_dark_mode: boolean;
     user_round_up_pref: number;
     user_discount_donate: number;

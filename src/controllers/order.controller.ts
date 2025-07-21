@@ -10,7 +10,7 @@ export class OrderController {
 
             // Bind all controller methods
             this.getAllOrders = this.getAllOrders.bind(this);
-            this.getOrderById = this.getOrderById.bind(this);
+            this.getOrders = this.getOrders.bind(this);
             this.createOrder = this.createOrder.bind(this);
             this.updateOrder = this.updateOrder.bind(this);
             this.deleteOrder = this.deleteOrder.bind(this);
@@ -24,6 +24,24 @@ export class OrderController {
             return res.status(500).json({ status: 'error', message: 'Failed to fetch orders' });
         }
     }
+
+async getOrders(req: Request, res: Response) {
+  try {
+    const user_id = parseInt(req.query.user_id as string);
+
+    if (isNaN(user_id)) {
+      return res.status(400).json({ status: 'error', message: 'Invalid user_id' });
+    }
+
+    const orders = await this.orderService.getOrders({ user_id });
+
+    return res.status(200).json({ status: 'success', data: orders });
+
+  } catch (err) {
+    console.error('Error fetching orders by User ID:', err);
+    return res.status(500).json({ status: 'error', message: 'Failed to fetch orders by User ID' });
+  }
+}
 
     async getOrderById(req: Request, res: Response) {
         try {
@@ -80,7 +98,8 @@ export class OrderController {
                 merchant_name,
                 merchant_location,
                 user_id,
-                order_items: validatedOrderItems
+                order_items: validatedOrderItems,
+                order_tokens: req.body.order_tokens,        
             };
 
             const newOrder = await this.orderService.createOrder(newOrderData);

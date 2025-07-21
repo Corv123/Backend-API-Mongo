@@ -19,6 +19,7 @@ export interface OrderDocument extends Document {
   order_complete_datetime?: Date;
   user_id: number;
   order_items: OrderItem[];
+  order_tokens: number;
 }
 
 const OrderItemSchema = new Schema({
@@ -57,15 +58,12 @@ const OrderSchema = new Schema<OrderDocument>({
   },
   order_complete_datetime: { type: Date, required: false },
 
-  user_id: { // Changed to Number
-    type: Number,
-    required: true
-  },
+  user_id: {type: Number,required: true},
+  
 
-  order_items: {
-    type: [OrderItemSchema],
-    required: true
-  }
+  order_tokens: { type: Number, required: true, default: 0 },
+
+  order_items: {type: [OrderItemSchema],required: true}
 }, {
   collection: 'orders',
   timestamps: false,

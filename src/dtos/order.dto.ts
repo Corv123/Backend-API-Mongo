@@ -3,13 +3,14 @@ export interface OrderItemDto {
     product_name: string;
     quantity: number;
     price_per_unit: number;
-    special_request?: string; // Optional, allows null/undefined
+    special_request?: string;
 }
 
 export interface CreateOrderDto {
     order_cost: number;
     total_order_cost: number;
     order_type: 'Takeaway' | 'Dine-In' | 'Delivery';
+    order_tokens: number;
     merchant_name: string;
     merchant_location: string;
     donation_id?: number;
@@ -24,6 +25,7 @@ export interface OrderResponseDto {
     order_status: string;
     order_cost: number;
     total_order_cost: number;
+    order_tokens: number;
     order_type: string;
     merchant_name: string;
     merchant_location: string;

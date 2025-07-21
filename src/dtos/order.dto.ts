@@ -38,6 +38,4 @@ export interface OrderResponseDto {
 export interface OrderQueryDto {
     user_id: number;
     order_id?: number;
-    start_date?: string;
-    end_date?: string;
 }

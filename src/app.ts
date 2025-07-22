@@ -7,7 +7,9 @@ import { allRoutes } from './routes/routes';
 dotenv.config();
 
 const CORS_WHITELIST: string[] = [
-    // Add your allowed origins here
+    'http://127.0.0.1:3000',  // Alternative localhost format
+    'http://localhost:3000',  // React development server
+    'http://localhost:3001',  // Alternative React port
 ];
 
 const startServer = async () => {
@@ -17,14 +19,19 @@ const startServer = async () => {
 
         const server: Application = express();
         const PORT = process.env.PORT || 8000;
-
-        server.use(cors({ origin: CORS_WHITELIST }));
         
-        server.use(function (req: Request, res: Response, next: NextFunction) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
+        server.use(cors({ 
+            origin: CORS_WHITELIST,
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+            allowedHeaders: [
+                'Origin',
+                'X-Requested-With', 
+                'Content-Type', 
+                'Accept',
+                'Authorization'
+            ]
+        }));
             
         server.use(express.json());
 

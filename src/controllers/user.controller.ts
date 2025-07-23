@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { User, UserDocument } from '../models/User';
+import bcrypt from 'bcryptjs';
 
 export class UserController {
     private userService = new UserService();
@@ -44,8 +45,8 @@ async login(req: Request, res: Response) {
             return res.status(404).json({ status: 'error', message: 'User not found' });
         }
 
-        // Simple password check (replace with bcrypt in production)
-        const isPasswordValid = user.password === password;
+        // Use bcrypt to compare hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ status: 'error', message: 'Invalid password' });
@@ -55,14 +56,14 @@ async login(req: Request, res: Response) {
             status: 'success',
             data: {
                 user_id: user.user_id,
-                username: user.username,                // <-- Added this line
+                username: user.username,
                 user_email: user.user_email,
                 user_mobile_number: user.user_mobile_number,
-                user_gender: user.user_gender,
-                user_allow_dark_mode: user.user_allow_dark_mode,
+                    user_gender: user.user_gender,
                 user_round_up_pref: user.user_round_up_pref,
                 user_discount_donate: user.user_discount_donate,
-                user_default_donation_method: user.user_default_donation_method
+                user_default_donation_method: user.user_default_donation_method,
+                default_charity: user.default_charity
             }
         });
     } catch (err) {

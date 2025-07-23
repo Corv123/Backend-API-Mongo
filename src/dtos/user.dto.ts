@@ -5,11 +5,11 @@ export interface CreateUserDto {
     user_email: string;
     password: string;
     tokens: number;
-    user_allow_dark_mode?: boolean;
     user_round_up_pref?: number;
     user_discount_donate?: number;
     user_gender?: string;
     user_default_donation_method?: 'Round Up' | 'Discount Donate';
+    default_charity?: string;
 }
 
 export interface UpdateUserDto {
@@ -18,11 +18,11 @@ export interface UpdateUserDto {
     user_email?: string;
     password?: string;
     tokens?: number;
-    user_allow_dark_mode?: boolean;
     user_round_up_pref?: number;
     user_discount_donate?: number;
     user_gender?: string;
     user_default_donation_method?: 'Round Up' | 'Discount Donate';
+    default_charity?: string;
 }
 
 export interface UserResponseDto {
@@ -32,11 +32,11 @@ export interface UserResponseDto {
     user_email: string;
     password?: string;
     tokens?: number;
-    user_allow_dark_mode: boolean;
     user_round_up_pref: number;
     user_discount_donate: number;
     user_login_status: boolean;
     user_login_datetime: Date | null;
     user_gender: string | null;
     user_default_donation_method: 'Round Up' | 'Discount Donate';
+    default_charity?: string;
 }

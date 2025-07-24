@@ -13,14 +13,9 @@ export class OrderService {
   }
 
 async getOrders(query: { user_id: number }) {
-    console.log('🔧 SERVICE DEBUG 🔧');
-    console.log('Service received query:', query);
-    console.log('Service user_id:', query.user_id, 'Type:', typeof query.user_id);
+  console.log('Searching orders for user_id:', query.user_id);
 
-    const result = await Order.find({ user_id: query.user_id }).lean();
-    console.log('Database query result count:', result.length);
-    
-    return result;
+  return await Order.find({ user_id: query.user_id }).lean();
 }
 
   async getOrderById(orderId: number) {

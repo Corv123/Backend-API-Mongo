@@ -26,32 +26,22 @@ export class OrderController {
     }
 
 async getOrders(req: Request, res: Response) {
-    try {
-        const user_id_param = req.query.user_id;
-        
-        // If no user_id provided, get ALL orders (for dashboard)
-        if (!user_id_param) {
-            console.log('No user_id provided, getting ALL orders for dashboard');
-            const orders = await this.orderService.getAllOrders();
-            return res.status(200).json({ status: 'success', data: orders });
-        }
-        
-        // If user_id provided, get specific user's orders
-        const user_id = parseInt(user_id_param as string);
-        if (isNaN(user_id)) {
-            return res.status(400).json({ status: 'error', message: 'Invalid user_id' });
-        }
-        
-        const orders = await this.orderService.getOrders({ user_id });
-        return res.status(200).json({ status: 'success', data: orders });
-        
-    } catch (err) {
-        console.error('Error fetching orders:', err);
-        return res.status(500).json({ status: 'error', message: 'Failed to fetch orders' });
+  try {
+    const user_id = parseInt(req.query.user_id as string);
+
+    if (isNaN(user_id)) {
+      return res.status(400).json({ status: 'error', message: 'Invalid user_id' });
     }
+
+    const orders = await this.orderService.getOrders({ user_id });
+
+    return res.status(200).json({ status: 'success', data: orders });
+
+  } catch (err) {
+    console.error('Error fetching orders by User ID:', err);
+    return res.status(500).json({ status: 'error', message: 'Failed to fetch orders by User ID' });
+  }
 }
-
-
 
     async getOrderById(req: Request, res: Response) {
         try {

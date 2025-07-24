@@ -4,7 +4,7 @@ export interface DonationDocument extends Document {
     donation_id: number;
     donation_datetime: Date;
     donation_dsgd_amt: mongoose.Types.Decimal128;
-    charity_id: number;
+    charity_id: string;
     donation_status: 'pending' | 'received' | 'failed';
     donation_amt: mongoose.Types.Decimal128;
     donation_type: 'direct_donation' | 'round_up';
@@ -16,7 +16,7 @@ const DonationSchema = new Schema<DonationDocument>({
     donation_id: { type: Number, required: true, unique: true },
     donation_datetime: { type: Date, required: true },
     donation_dsgd_amt: { type: Schema.Types.Decimal128, required: true },
-    charity_id: { type: Number, required: true },
+    charity_id: { type: String, required: true },
     donation_status: { 
         type: String, 
         enum: ['pending', 'received', 'failed'], 
@@ -26,7 +26,7 @@ const DonationSchema = new Schema<DonationDocument>({
     donation_amt: { type: Schema.Types.Decimal128, required: true },
     donation_type: { 
         type: String, 
-        enum: ['direct_donation', 'round_up'], 
+        enum: ['direct_donation', 'round_up', 'discount_donate'], 
         required: true 
     },
     donation_cause: { type: String, required: true },

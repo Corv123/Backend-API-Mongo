@@ -34,4 +34,31 @@ export class UserService {
     async getUserById(userId: number) {
         return User.findOne({ user_id: userId }).lean();
     }
+
+    async checkExists(email: string, phone: string) {
+        const [emailExists, phoneExists] = await Promise.all([
+            User.exists({ user_email: email }),
+            User.exists({ user_mobile_number: phone })
+        ]);
+        return {
+            emailExists: !!emailExists,
+            phoneExists: !!phoneExists
+        };
+    }
+
+    async getUserByEmail(email: string) {
+        return User.findOne({ user_email: email }).lean();
+    }
+
+    async resetPasswordByEmail(email: string, newPassword: string) {
+        const hashed = await bcrypt.hash(newPassword, 10);
+
+        const updatedUser = await User.findOneAndUpdate(
+            { user_email: email },
+            { password: hashed },
+            { new: true }
+        ).lean();
+
+        return updatedUser;
+    }
 }

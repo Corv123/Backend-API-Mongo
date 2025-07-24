@@ -41,8 +41,9 @@ export class DonationController {
         try {
             const donation = await this.donationService.createDonation(req.body as CreateDonationDto);
             return res.status(201).json({ status: 'success', data: donation });
-        } catch {
-            return res.status(500).json({ status: 'error', message: 'Failed to create donation' });
+        } catch (error) {
+            console.error('Donation creation error:', error);
+            return res.status(500).json({ status: 'error', message: error instanceof Error ? error.message : String(error) });
         }
     }
 

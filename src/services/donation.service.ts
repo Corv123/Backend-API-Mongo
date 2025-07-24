@@ -1,9 +1,34 @@
 import { Donation } from '../models';
 import { CreateDonationDto, DonationQueryDto } from '../dtos/donation.dto';
+import { Counter } from '../models/counter';
+import { User } from '../models/User';
+import mongoose from 'mongoose';
 
 export class DonationService {
   async createDonation(data: CreateDonationDto) {
-    const donation = new Donation(data);
+    // Generate unique donation_id
+    const counter = await Counter.findOneAndUpdate(
+      { _id: 'donation_id' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+    const donation_id = counter.seq;
+
+    // Find user by user_id (number)
+    const user = await User.findOne({ user_id: data.user_id });
+    if (!user) {
+      throw new Error('Invalid user_id: user not found');
+    }
+
+    // Prepare donation data
+    const donationData: any = {
+      ...data,
+      donation_id,
+      user_id: user._id, // Use ObjectId
+    };
+
+    // Create and save donation
+    const donation = new Donation(donationData);
     return await donation.save();
   }
 

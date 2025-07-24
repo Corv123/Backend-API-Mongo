@@ -34,4 +34,20 @@ export class UserService {
     async getUserById(userId: number) {
         return User.findOne({ user_id: userId }).lean();
     }
+
+    async getUserByEmail(email: string) {
+        return User.findOne({ user_email: email }).lean();
+    }
+
+    async resetPasswordByEmail(email: string, newPassword: string) {
+        const hashed = await bcrypt.hash(newPassword, 10);
+
+        const updatedUser = await User.findOneAndUpdate(
+            { user_email: email },
+            { password: hashed },
+            { new: true }
+        ).lean();
+
+        return updatedUser;
+    }
 }

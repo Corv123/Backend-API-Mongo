@@ -10,5 +10,7 @@ router.get('/:user_id', userController.getUserById);
 router.post('/', userController.createUser);
 router.put('/:user_id', userController.updateUser);
 router.post('/login', userController.login);
+router.get('/email/:email', userController.getUserByEmail);
+router.put('/reset-password/:email', userController.resetPasswordByEmail);
 
 export default router;

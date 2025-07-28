@@ -15,7 +15,7 @@ export interface OrderDocument extends Document {
   order_type: 'Takeaway' | 'Dine-In' | 'Delivery';
   merchant_name: string;
   merchant_location: string;
-  donation_id?: mongoose.Types.ObjectId;
+  donation_id?: number;
   order_complete_datetime?: Date;
   user_id: number;
   order_items: OrderItem[];
@@ -52,8 +52,7 @@ const OrderSchema = new Schema<OrderDocument>({
   merchant_name:       { type: String, required: true },
   merchant_location:   { type: String, required: true },
   donation_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'Donation',
+    type: Number,
     required: false
   },
   order_complete_datetime: { type: Date, required: false },

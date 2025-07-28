@@ -75,6 +75,7 @@ async getOrders(req: Request, res: Response) {
                 merchant_name,
                 merchant_location,
                 user_id,
+                donation_id,
                 order_items 
             } = req.body;
 
@@ -108,6 +109,7 @@ async getOrders(req: Request, res: Response) {
                 merchant_name,
                 merchant_location,
                 user_id,
+                donation_id,
                 order_items: validatedOrderItems,
                 order_tokens: req.body.order_tokens,        
             };

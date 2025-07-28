@@ -1,4 +1,5 @@
 export interface CreateDonationDto {
+    donation_id?: number;
     donation_datetime: Date;
     donation_dsgd_amt: number;
     charity_id: number;

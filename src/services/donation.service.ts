@@ -6,13 +6,8 @@ import mongoose from 'mongoose';
 
 export class DonationService {
   async createDonation(data: CreateDonationDto) {
-    // Generate unique donation_id
-    const counter = await Counter.findOneAndUpdate(
-      { _id: 'donation_id' },
-      { $inc: { seq: 1 } },
-      { new: true, upsert: true }
-    );
-    const donation_id = counter.seq;
+    // Use donation_id from frontend or generate random 4-digit number
+    const donation_id = data.donation_id || Math.floor(1000 + Math.random() * 9000);
 
     // Find user by user_id (number)
     const user = await User.findOne({ user_id: data.user_id });
